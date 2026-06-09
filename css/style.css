@@ -207,14 +207,14 @@ button, input, textarea, select {
   justify-content: center;
   overflow: hidden;
   margin-top: 60px;
+  background: #000;
 }
 
 .hero__bg {
   position: absolute;
   inset: 0;
-  /* 仮画像：後でGoogle DriveのURLに差し替え */
-  background: url("../assets/images/hero-placeholder.jpg") center center / cover no-repeat;
-  filter: brightness(0.6);
+  background: center center / cover no-repeat;
+  opacity: 0.3;
 }
 
 /* 仮画像がない場合のフォールバック */
