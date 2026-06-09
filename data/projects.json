@@ -3,14 +3,14 @@
     "title": "共創ワークショップ運営",
     "category": "ワークショップ",
     "summary": "Needknower・学生・専門家が集い、課題の整理からアイデア創出までを共創で行う場を設計・運営します。",
-    "image_url": "",
+    "image_url": "assets/images/Workshop-5.jpg",
     "url": "#"
   },
   {
     "title": "プロトタイプ作成",
     "category": "プロトタイプ",
     "summary": "体験やサービスの試作を制作し、検証・改善を通じて社会実装につなげます。",
-    "image_url": "",
+    "image_url": "assets/images/prototype-4.jpg",
     "url": "#"
   }
 ]
