@@ -1,0 +1,30 @@
+[
+  {
+    "name": "山田 太郎",
+    "affiliation": "○○大学 工学部",
+    "role": "プロジェクトリーダー",
+    "comment": "共創を通じて社会を変えたい",
+    "image_url": ""
+  },
+  {
+    "name": "佐藤 花子",
+    "affiliation": "△△大学 デザイン学部",
+    "role": "デザイン担当",
+    "comment": "違いが価値になる文化をつくりたい",
+    "image_url": ""
+  },
+  {
+    "name": "鈴木 一郎",
+    "affiliation": "□□大学 情報学部",
+    "role": "エンジニア",
+    "comment": "テクノロジーで人の力になりたい",
+    "image_url": ""
+  },
+  {
+    "name": "田中 美咲",
+    "affiliation": "◇◇大学 福祉学部",
+    "role": "リサーチ担当",
+    "comment": "一人ひとりの声に耳を傾けたい",
+    "image_url": ""
+  }
+]

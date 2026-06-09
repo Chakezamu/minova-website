@@ -1,131 +1,35 @@
 /* ============================================
    MINOVA - cms.js
-   Google Sheets CMS連携（Google Apps Script API経由）
+   ローカルJSONファイルからデータを読み込み、ページに描画する
 
-   使い方：
-   1. Google Apps Script で gas/Code.gs をデプロイし、Web App URL を取得
-   2. 下記の GAS_API_URL にその URL を設定
-   3. Google Sheets にデータを入力すれば、サイトに自動反映されます
+   データファイル:
+   - data/news.json      … お知らせ
+   - data/projects.json   … プロジェクト
+   - data/members.json    … MINOVAメンバー
+   - data/tom-members.json … TOM JAPAN 学生メンバー
    ============================================ */
 
-// GAS Web App URL（デプロイ後に差し替えてください）
-const GAS_API_URL = "https://script.google.com/macros/s/XXXX/exec";
-
-// --- フォールバック用の仮データ ---
-const FALLBACK_NEWS = [
-  {
-    date: "2025.10.2",
-    title: "100Banchに採択されました。",
-    category: "NEWS",
-    summary: "以下、設定済みのスタイル等のサンプルです。※お知らせ記事ページでは、タイトルに見出し1（H1）を設定…",
-    image_url: "",
-    url: "#",
-  },
-  {
-    date: "2025.10.1",
-    title: "クロープナーGIC ベストアクセシブルデザイン賞",
-    category: "NEWS",
-    summary: "",
-    image_url: "",
-    url: "#",
-  },
-  {
-    date: "2025.10.1",
-    title: "公益財団法人Soilに採択されました。",
-    category: "NEWS",
-    summary: "",
-    image_url: "",
-    url: "#",
-  },
-];
-
-const FALLBACK_PROJECTS = [
-  {
-    title: "共創ワークショップ運営",
-    category: "ワークショップ",
-    summary: "Needknower・学生・専門家が集い、課題の整理からアイデア創出までを共創で行う場を設計・運営します。",
-    image_url: "",
-    url: "#",
-  },
-  {
-    title: "プロトタイプ作成",
-    category: "プロトタイプ",
-    summary: "体験やサービスの試作を制作し、検証・改善を通じて社会実装につなげます。",
-    image_url: "",
-    url: "#",
-  },
-  {
-    title: "Need-Knowerとの共創活動",
-    category: "共創",
-    summary: "当事者の声をもとに、共に課題を見立て解決策をつくる活動を行っています。",
-    image_url: "",
-    url: "#",
-  },
-];
-
-const FALLBACK_MEMBERS = [
-  {
-    name: "山田 太郎",
-    affiliation: "○○大学 工学部",
-    role: "プロジェクトリーダー",
-    comment: "共創を通じて社会を変えたい",
-    image_url: "",
-  },
-  {
-    name: "佐藤 花子",
-    affiliation: "△△大学 デザイン学部",
-    role: "デザイン担当",
-    comment: "違いが価値になる文化をつくりたい",
-    image_url: "",
-  },
-  {
-    name: "鈴木 一郎",
-    affiliation: "□□大学 情報学部",
-    role: "エンジニア",
-    comment: "テクノロジーで人の力になりたい",
-    image_url: "",
-  },
-  {
-    name: "田中 美咲",
-    affiliation: "◇◇大学 福祉学部",
-    role: "リサーチ担当",
-    comment: "一人ひとりの声に耳を傾けたい",
-    image_url: "",
-  },
-];
-
 /**
- * GAS APIからデータを取得する
- * @param {string} type - "news" | "projects" | "members"
+ * JSONファイルからデータを取得する
+ * @param {string} type - "news" | "projects" | "members" | "tom-members"
  * @returns {Promise<Array>}
  */
 async function fetchCMSData(type) {
   try {
-    const response = await fetch(`${GAS_API_URL}?type=${type}`);
-    if (!response.ok) throw new Error("API Error");
-    const data = await response.json();
-    return data;
+    const response = await fetch(`data/${type}.json`);
+    if (!response.ok) throw new Error("Fetch Error");
+    return await response.json();
   } catch (error) {
-    console.warn(`CMS データ取得失敗 (${type}): フォールバックデータを使用します`, error);
-    // フォールバックデータを返す
-    switch (type) {
-      case "news":
-        return FALLBACK_NEWS;
-      case "projects":
-        return FALLBACK_PROJECTS;
-      case "members":
-        return FALLBACK_MEMBERS;
-      default:
-        return [];
-    }
+    console.warn(`データ取得失敗 (${type}):`, error);
+    return [];
   }
 }
 
 /**
  * 画像URLを生成する
- * Google DriveのURLまたはローカルパスに対応
  * @param {string} url - 画像URL
  * @param {string} fallbackText - 画像がない場合のテキスト
+ * @param {string} className - CSSクラス名
  * @returns {string} HTML文字列
  */
 function renderImage(url, fallbackText, className) {
@@ -201,12 +105,14 @@ async function renderProjectCards(containerId, limit) {
 /**
  * メンバーカードを描画する
  * @param {string} containerId - 描画先のHTML要素のID
+ * @param {string} dataType - "members" | "tom-members"
  */
-async function renderMemberCards(containerId) {
+async function renderMemberCards(containerId, dataType) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const memberData = await fetchCMSData("members");
+  var type = dataType || "members";
+  const memberData = await fetchCMSData(type);
 
   if (memberData.length === 0) return;
 
@@ -225,14 +131,17 @@ async function renderMemberCards(containerId) {
     .join("");
 }
 
-// --- ページ読み込み時にCMSデータを取得・描画 ---
+// --- ページ読み込み時にデータを取得・描画 ---
 document.addEventListener("DOMContentLoaded", function () {
-  // ニュースリスト（各ページに存在する場合に描画）
+  // ニュースリスト
   renderNewsList("newsList", 0);
 
   // プロジェクトカード
   renderProjectCards("projectCards", 0);
 
-  // メンバーカード
-  renderMemberCards("memberCards");
+  // MINOVAメンバーカード
+  renderMemberCards("minovaMemberCards", "members");
+
+  // TOM JAPAN 学生メンバーカード
+  renderMemberCards("memberCards", "tom-members");
 });
