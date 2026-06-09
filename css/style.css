@@ -505,6 +505,39 @@ button, input, textarea, select {
   line-height: 1.6;
 }
 
+/* --- メンバー横スクロール --- */
+.members-scroll {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.members-scroll .member-card {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+}
+
+.members-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.members-scroll::-webkit-scrollbar-track {
+  background: #eee;
+  border-radius: 3px;
+}
+
+.members-scroll::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.members-scroll::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
 /* --- メンバーカード --- */
 .members-grid {
   display: grid;
