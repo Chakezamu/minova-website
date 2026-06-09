@@ -1002,6 +1002,35 @@ button, input, textarea, select {
   color: rgba(255, 255, 255, 0.4);
 }
 
+/* --- プライバシーポリシー --- */
+.privacy__heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.privacy__text {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 2;
+  margin-bottom: 16px;
+}
+
+.privacy__list {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 2;
+  margin-bottom: 16px;
+  padding-left: 24px;
+  list-style: disc;
+}
+
+.privacy__list li {
+  margin-bottom: 4px;
+}
+
 /* --- フェードインアニメーション --- */
 .fade-in {
   opacity: 0;
